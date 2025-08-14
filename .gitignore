@@ -1,0 +1,69 @@
+# ---- OS junk ----
+.DS_Store
+Thumbs.db
+
+# ---- Logs ----
+*.log
+logs/
+*.pid
+
+# ---- IDE: IntelliJ IDEA ----
+.idea/
+*.iml
+out/
+
+# ---- Build outputs ----
+target/
+build/
+.gradle/
+dist/
+
+# ---- Maven/Gradle wrappers ----
+!gradle/wrapper/gradle-wrapper.jar
+.mvn/wrapper/maven-wrapper.jar
+.mvn/wrapper/maven-wrapper.properties
+
+# ---- Node/Yarn (for Frontend) ----
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.next/
+.vite/
+coverage/
+
+# ---- Virtual envs / tools ----
+.venv/
+.env
+.env.local
+.env.*.local
+
+# ---- Java/Keystore/Secrets ----
+*.jks
+*.keystore
+*.p12
+*.pem
+*.key
+
+# ---- Spring config (ignore local secrets) ----
+src/main/resources/application-*.local.properties
+src/main/resources/application-*.local.yml
+src/main/resources/*.secret.*
+
+# ---- Database dumps (commit migrations instead) ----
+*.sql
+*.db
+*.sqlite
+*.sqlite3
+
+# ---- IntelliJ project files to allow (unignore) ----
+!**/src/main/**
+!**/src/test/**
+!**/pom.xml
+!**/build.gradle
+!**/settings.gradle
+!**/gradle.properties
+!package.json
+!package-lock.json
+!yarn.lock
