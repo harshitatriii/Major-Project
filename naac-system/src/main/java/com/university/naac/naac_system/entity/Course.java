@@ -1,7 +1,9 @@
 package com.university.naac.naac_system.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
 @Entity
 public class Course {
 

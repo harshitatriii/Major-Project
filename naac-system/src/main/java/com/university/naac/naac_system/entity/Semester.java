@@ -1,8 +1,11 @@
 package com.university.naac.naac_system.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.util.List;
 
+@Data
 @Entity
 public class Semester {
 
