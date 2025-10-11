@@ -10,4 +10,5 @@ public interface SemesterService {
     Semester getById(Long id);
     List<Semester> getAll();
     void delete(Long id);
+    List<Semester> getByProgram(Long programId);
 }

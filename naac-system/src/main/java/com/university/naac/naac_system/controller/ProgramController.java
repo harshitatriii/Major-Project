@@ -98,4 +98,20 @@ public class ProgramController {
         programService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    // inside com.university.naac.naac_system.controller.ProgramController
+
+    // GET programs by school id
+    @GetMapping("/getBySchool/{schoolId}")
+    public List<ProgramResponse> getProgramsBySchool(@PathVariable Long schoolId) {
+        return programService.getBySchoolId(schoolId).stream().map(p -> {
+            ProgramResponse r = new ProgramResponse();
+            r.setProgramId(p.getProgramId());
+            r.setName(p.getName());
+            r.setProgramType(p.getProgramType());
+            r.setSchoolName(p.getSchool() != null ? p.getSchool().getName() : null);
+            return r;
+        }).collect(Collectors.toList());
+    }
+
 }

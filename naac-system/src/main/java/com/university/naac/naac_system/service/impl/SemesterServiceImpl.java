@@ -45,4 +45,8 @@ public class SemesterServiceImpl implements SemesterService {
     public void delete(Long id) {
         semesterRepository.deleteById(id);
     }
+
+    public List<Semester> getByProgram(Long programId) {
+        return semesterRepository.findByProgram_ProgramId(programId);
+    }
 }

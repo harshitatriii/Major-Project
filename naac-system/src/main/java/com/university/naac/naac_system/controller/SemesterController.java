@@ -56,6 +56,20 @@ public class SemesterController {
         }).collect(Collectors.toList());
     }
 
+    // GET BY PROGRAM
+    @GetMapping("/byProgram/{programId}")
+    public ResponseEntity<List<SemesterResponse>> getByProgram(@PathVariable Long programId) {
+        List<SemesterResponse> response = semesterService.getByProgram(programId).stream().map(s -> {
+            SemesterResponse r = new SemesterResponse();
+            r.setSemesterId(s.getSemesterId());
+            r.setSemesterNumber(s.getSemesterNumber());
+            r.setProgramName(s.getProgram() != null ? s.getProgram().getName() : null);
+            return r;
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.ok(response);
+    }
+
     // GET BY ID
     @GetMapping("/{id}")
     public ResponseEntity<SemesterResponse> getById(@PathVariable Long id) {

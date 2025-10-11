@@ -54,4 +54,9 @@ public class ProgramServiceImpl implements ProgramService {
     public void delete(Long id) {
         programRepository.deleteById(id);
     }
+
+    @Override
+    public List<Program> getBySchoolId(Long schoolId) {
+        return programRepository.findBySchool_SchoolId(schoolId);
+    }
 }
