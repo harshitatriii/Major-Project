@@ -8,8 +8,6 @@ const Faculties = () => {
   const [schools, setSchools] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  // Can be removed.
-  const [totalFaculties, setTotalFaculties] = useState(0);
   const [formData, setFormData] = useState({
     schoolId: '',
     name: '',
