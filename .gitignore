@@ -67,3 +67,9 @@ src/main/resources/*.secret.*
 !package.json
 !package-lock.json
 !yarn.lock
+
+
+# --- Allow tracking of frontend source code ---
+!naac-frontend/src/**
+!naac-frontend/package.json
+!naac-frontend/package-lock.json
