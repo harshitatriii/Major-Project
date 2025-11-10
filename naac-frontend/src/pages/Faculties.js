@@ -32,8 +32,6 @@ const Faculties = () => {
       ]);
       setFaculties(facultiesRes.data);
       setSchools(schoolsRes.data);
-      // adding console log to verify data
-      console.log('Faculties fetched:', facultiesRes.data);
     } catch (error) {
       console.error('Error fetching data:', error);
       setError('Failed to load data');
