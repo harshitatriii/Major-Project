@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {schoolService} from '../services/schoolService';
 import {semesterService} from '../services/semesterService';
 import {reportService} from '../services/reportService';
 import {programService} from '../services/programService';
-
 import { printNAAC221Report, generateReportCSV } from '../utils/printReport';
 import { downloadCSV } from '../utils/helpers';
 
 const Reports = () => {
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState('221');
+  
   const [schools, setSchools] = useState([]);
   const [programs, setPrograms] = useState([]);
   const [semesters, setSemesters] = useState([]);
@@ -19,6 +22,7 @@ const Reports = () => {
   const [reportData, setReportData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   useEffect(() => {
     fetchSchools();
@@ -75,6 +79,7 @@ const Reports = () => {
   const handleGenerateReport = async (e) => {
     e.preventDefault();
     setError('');
+    setSuccess('');
     setReportData(null);
 
     if (!selectedProgram || !selectedSemester) {
@@ -87,6 +92,8 @@ const Reports = () => {
     try {
       const response = await reportService.getStudentTeacherRatio(selectedProgram, selectedSemester);
       setReportData(response.data);
+      setSuccess('Report generated successfully!');
+      setTimeout(() => setSuccess(''), 3000);
     } catch (error) {
       console.error('Error generating report:', error);
       setError('Failed to generate report. Please ensure data exists for the selected criteria.');
@@ -107,34 +114,92 @@ const Reports = () => {
     return 'Needs Improvement';
   };
 
+  const handlePrintReport = () => {
+    if (!reportData) return;
+    
+    try {
+      const filters = {
+        school: schools.find(s => s.schoolId === parseInt(selectedSchool))?.name || 'N/A',
+        program: programs.find(p => p.programId === parseInt(selectedProgram))?.name || 'N/A',
+        semester: semesters.find(s => s.semesterId === parseInt(selectedSemester))?.semesterNumber || 'N/A'
+      };
+      
+      printNAAC221Report(reportData, filters);
+      setSuccess('Print window opened! Use browser print dialog to print or save as PDF.');
+      setTimeout(() => setSuccess(''), 5000);
+    } catch (error) {
+      setError('Failed to open print window');
+      setTimeout(() => setError(''), 3000);
+    }
+  };
+
+  const handleExportCSV = () => {
+    if (!reportData) return;
+    
+    try {
+      const filters = {
+        school: schools.find(s => s.schoolId === parseInt(selectedSchool))?.name || 'N/A',
+        program: programs.find(p => p.programId === parseInt(selectedProgram))?.name || 'N/A',
+        semester: semesters.find(s => s.semesterId === parseInt(selectedSemester))?.semesterNumber || 'N/A'
+      };
+      
+      const csvData = generateReportCSV(reportData, filters);
+      const filename = `NAAC_2.2.1_Report_${new Date().toISOString().split('T')[0]}.csv`;
+      downloadCSV(csvData, filename);
+      
+      setSuccess(`Report exported successfully as ${filename}`);
+      setTimeout(() => setSuccess(''), 5000);
+    } catch (error) {
+      setError('Failed to export CSV');
+      setTimeout(() => setError(''), 3000);
+    }
+  };
+
   return (
     <div>
       <div className="mb-4">
-        <h2 className="fw-bold">NAAC Reports</h2>
-        <p className="text-muted">Generate and view NAAC evaluation reports</p>
+        <h2 className="fw-bold">NAAC Reports Dashboard</h2>
+        <p className="text-muted">Generate and view comprehensive NAAC evaluation reports</p>
       </div>
 
-      {/* Report Type Tabs */}
+      {/* Report Type Tabs - Updated */}
       <ul className="nav nav-tabs mb-4">
         <li className="nav-item">
-          <a className="nav-link active" href="#">
+          <button 
+            className={`nav-link ${activeTab === '221' ? 'active' : ''}`}
+            onClick={() => setActiveTab('221')}
+          >
             <i className="bi bi-bar-chart me-2"></i>
             2.2.1 Student-Teacher Ratio
-          </a>
+          </button>
         </li>
         <li className="nav-item">
-          <a className="nav-link disabled" href="#">
-            <i className="bi bi-people me-2"></i>
-            2.2.2 Mentor-Mentee (Coming Soon)
-          </a>
+          <button 
+            className="nav-link"
+            onClick={() => navigate('/mentor-mentee')}
+          >
+            <i className="bi bi-person-lines-fill me-2"></i>
+            2.2.2 Mentor-Mentee System
+          </button>
         </li>
         <li className="nav-item">
-          <a className="nav-link disabled" href="#">
-            <i className="bi bi-graph-up me-2"></i>
-            2.3.3 Learner Analytics (Coming Soon)
-          </a>
+          <button 
+            className="nav-link"
+            onClick={() => navigate('/performance')}
+          >
+            <i className="bi bi-graph-up-arrow me-2"></i>
+            2.3.3 Student Performance
+          </button>
         </li>
       </ul>
+
+      {success && (
+        <div className="alert alert-success alert-dismissible fade show" role="alert">
+          <i className="bi bi-check-circle me-2"></i>
+          {success}
+          <button type="button" className="btn-close" onClick={() => setSuccess('')}></button>
+        </div>
+      )}
 
       {error && (
         <div className="alert alert-danger alert-dismissible fade show" role="alert">
@@ -328,11 +393,19 @@ const Reports = () => {
                 </div>
 
                 <div className="mt-4">
-                  <button className="btn btn-success me-2">
-                    <i className="bi bi-download me-2"></i>
-                    Export PDF
+                  <button 
+                    className="btn btn-success me-2"
+                    onClick={handleExportCSV}
+                    title="Download report as CSV file"
+                  >
+                    <i className="bi bi-file-earmark-excel me-2"></i>
+                    Export CSV
                   </button>
-                  <button className="btn btn-outline-primary">
+                  <button 
+                    className="btn btn-outline-primary"
+                    onClick={handlePrintReport}
+                    title="Print report or save as PDF"
+                  >
                     <i className="bi bi-printer me-2"></i>
                     Print Report
                   </button>

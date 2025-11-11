@@ -155,6 +155,50 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
+        
+        <div className="col-lg-4">
+          <div className="card shadow-sm">
+            <div className="card-body">
+              <h5 className="card-title mb-4">NAAC Criteria</h5>
+              <div className="list-group list-group-flush">
+                <Link to="/reports" className="list-group-item list-group-item-action">
+                  <div className="d-flex align-items-center">
+                    <i className="bi bi-bar-chart text-primary me-3"></i>
+                    <div>
+                      <p className="mb-0 fw-semibold">2.2.1 Student-Teacher Ratio</p>
+                      <small className="text-muted">View Report</small>
+                    </div>
+                  </div>
+                </Link>
+                <Link to="/mentor-mentee" className="list-group-item list-group-item-action">
+                  <div className="d-flex align-items-center">
+                    <i className="bi bi-person-lines-fill text-success me-3"></i>
+                    <div>
+                      <p className="mb-0 fw-semibold">2.2.2 Mentor-Mentee System</p>
+                      <small className="text-muted">Manage Assignments</small>
+                    </div>
+                  </div>
+                </Link>
+                <Link to="/performance" className="list-group-item list-group-item-action">
+                  <div className="d-flex align-items-center">
+                    <i className="bi bi-graph-up-arrow text-info me-3"></i>
+                    <div>
+                      <p className="mb-0 fw-semibold">2.3.3 Student Performance</p>
+                      <small className="text-muted">Evaluate & Analyze</small>
+                    </div>
+                  </div>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Dashboard;
+
 
         <div className="col-lg-4">
           <div className="card shadow-sm">
@@ -170,21 +214,26 @@ const Dashboard = () => {
                     </div>
                   </div>
                 </Link>
-                <div className="list-group-item text-muted">
-                  <i className="bi bi-hourglass-split me-3"></i>
-                  <span>2.2.2 Mentor-Mentee (Coming Soon)</span>
-                </div>
-                <div className="list-group-item text-muted">
-                  <i className="bi bi-hourglass-split me-3"></i>
-                  <span>2.3.3 Learner Analytics (Coming Soon)</span>
-                </div>
+                <Link to="/mentor-mentee" className="list-group-item list-group-item-action">
+                  <div className="d-flex align-items-center">
+                    <i className="bi bi-person-lines-fill text-success me-3"></i>
+                    <div>
+                      <p className="mb-0 fw-semibold">2.2.2 Mentor-Mentee System</p>
+                      <small className="text-muted">Manage Assignments</small>
+                    </div>
+                  </div>
+                </Link>
+                <Link to="/performance" className="list-group-item list-group-item-action">
+                  <div className="d-flex align-items-center">
+                    <i className="bi bi-graph-up-arrow text-info me-3"></i>
+                    <div>
+                      <p className="mb-0 fw-semibold">2.3.3 Student Performance</p>
+                      <small className="text-muted">Evaluate & Analyze</small>
+                    </div>
+                  </div>
+                </Link>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  );
-};
-
-export default Dashboard;
+        
