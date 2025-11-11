@@ -14,7 +14,10 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")  // apply to all endpoints
-                        .allowedOrigins("http://localhost:3000") // your React app origin
+                        .allowedOrigins(
+                                "http://localhost:3000", // for local development
+                                "https://major-project-oaik4cbhb-harshitatriiis-projects.vercel.app" //frontend deployment URL
+                        )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
