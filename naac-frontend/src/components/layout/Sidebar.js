@@ -1,4 +1,3 @@
-// src/components/layout/Sidebar.js
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -13,9 +12,9 @@ const Sidebar = () => {
     { path: '/faculties', icon: 'people', label: 'Faculties' },
     { path: '/students', icon: 'person-badge', label: 'Students' },
     { path: '/assignments', icon: 'journal-text', label: 'Assignments' },
-    { path: '/reports', icon: 'file-bar-graph', label: 'Reports' },
-    { path: '/mentor-mentee', icon: 'person-lines-fill', label: 'Mentor-Mentee 2.2.2' },
-    { path: '/performance', icon: 'graph-up-arrow', label: 'Performance 2.3.3' },
+    { path: '/reports', icon: 'file-bar-graph', label: 'NAAC Reports' },
+    { path: '/mentor-mentee', icon: 'person-lines-fill', label: 'Mentor-Mentee' },
+    { path: '/performance', icon: 'graph-up-arrow', label: 'Performance' },
   ];
 
   return (
