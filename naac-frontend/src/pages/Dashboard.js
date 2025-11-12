@@ -134,7 +134,7 @@ const Dashboard = () => {
                     </div>
                     <div className="flex-grow-1">
                       <p className="mb-0 fw-semibold">New student added</p>
-                      <small className="text-muted">Aarav Kumar - B.Tech CSE</small>
+                      <small className="text-muted">Amit Raj - B.Tech CSE</small>
                     </div>
                     <small className="text-muted">2 hours ago</small>
                   </div>
@@ -146,7 +146,7 @@ const Dashboard = () => {
                     </div>
                     <div className="flex-grow-1">
                       <p className="mb-0 fw-semibold">Faculty assignment created</p>
-                      <small className="text-muted">Prof. John Doe assigned to Data Structures</small>
+                      <small className="text-muted">Dr. Monika Khatkar assigned to Data Structures</small>
                     </div>
                     <small className="text-muted">5 hours ago</small>
                   </div>
