@@ -6,7 +6,7 @@ const StudentPerformance = () => {
   const [activeTab, setActiveTab] = useState('evaluate');
   const [students, setStudents] = useState([]);
   const [summary, setSummary] = useState(null);
-  
+
   // Evaluate Form State
   const [evaluateForm, setEvaluateForm] = useState({
     studentId: '',
@@ -14,7 +14,12 @@ const StudentPerformance = () => {
     totalMarks: 100
   });
   const [evaluationResult, setEvaluationResult] = useState(null);
-  
+
+  // View by Category
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [studentsByCategory, setStudentsByCategory] = useState([]);
+  const [loadingCategory, setLoadingCategory] = useState(false);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -55,7 +60,7 @@ const StudentPerformance = () => {
         evaluateForm.marksObtained,
         evaluateForm.totalMarks
       );
-      
+
       setEvaluationResult(response.data);
       setSuccess('Student performance evaluated successfully!');
       fetchSummary(); // Refresh summary
@@ -211,6 +216,15 @@ const StudentPerformance = () => {
             Performance Summary
           </button>
         </li>
+        <li className="nav-item">
+          <button 
+            className={`nav-link ${activeTab === 'viewCategory' ? 'active' : ''}`}
+            onClick={() => setActiveTab('viewCategory')}
+          >
+            <i className="bi bi-people me-2"></i>
+            View Students by Category
+          </button>
+        </li>
       </ul>
 
       {/* Tab Content */}
@@ -322,8 +336,6 @@ const StudentPerformance = () => {
                           </p>
                         </div>
                       </div>
-                      
-                      {/* Performance Indicator */}
                       <div className="mt-3">
                         <div className="progress" style={{ height: '25px' }}>
                           <div 
@@ -461,6 +473,92 @@ const StudentPerformance = () => {
                   </tbody>
                 </table>
               </div>
+            </div>
+          )}
+
+          {/* View Students by Category Tab */}
+          {activeTab === 'viewCategory' && (
+            <div>
+              <h5 className="card-title mb-4">
+                <i className="bi bi-people me-2"></i>
+                View Students by Category
+              </h5>
+
+              <div className="row g-3 mb-4">
+                <div className="col-md-4">
+                  <label className="form-label fw-semibold">Select Category</label>
+                  <select
+                    className="form-select"
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                  >
+                    <option value="">Choose Category...</option>
+                    <option value="ADVANCED">Advanced</option>
+                    <option value="AVERAGE">Average</option>
+                    <option value="SLOW">Slow</option>
+                  </select>
+                </div>
+                <div className="col-md-2">
+                  <button
+                    className="btn btn-primary w-100"
+                    onClick={async () => {
+                      if (!selectedCategory) return;
+                      setLoadingCategory(true);
+                      try {
+                        const res = await performanceService.getStudentsByCategory(selectedCategory);
+                        setStudentsByCategory(res.data);
+                      } catch (err) {
+                        console.error('Error fetching students by category', err);
+                        setStudentsByCategory([]);
+                      } finally {
+                        setLoadingCategory(false);
+                      }
+                    }}
+                  >
+                    {loadingCategory ? 'Loading...' : 'View Students'}
+                  </button>
+                </div>
+              </div>
+
+              {/* Students Table */}
+              {studentsByCategory.length > 0 && (
+                <div className="table-responsive">
+                  <table className="table table-bordered">
+                    <thead className="table-light">
+                      <tr>
+                        <th>Student ID</th>
+                        <th>Name</th>
+                        <th>Marks Obtained</th>
+                        <th>Total Marks</th>
+                        <th>Percentage</th>
+                        <th>Category</th>
+                        <th>Evaluated At</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {studentsByCategory.map((s) => (
+                        <tr key={s.studentId}>
+                          <td>{s.studentId}</td>
+                          <td>{s.studentName}</td>
+                          <td>{s.marksObtained}</td>
+                          <td>{s.totalMarks}</td>
+                          <td>{s.percentage.toFixed(2)}%</td>
+                          <td>
+                            <span className={`badge bg-${getCategoryColor(s.category)}`}>
+                              {s.category}
+                            </span>
+                          </td>
+                          <td>{new Date(s.evaluatedAt).toLocaleString()}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {studentsByCategory.length === 0 && selectedCategory && !loadingCategory && (
+                <p className="text-muted">No students found for this category.</p>
+              )}
             </div>
           )}
         </div>

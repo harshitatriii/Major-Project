@@ -3,6 +3,7 @@ package com.university.naac.naac_system.controller;
 import com.university.naac.naac_system.dto.PerformanceSummaryResponse;
 import com.university.naac.naac_system.dto.StudentPerformanceResponse;
 import com.university.naac.naac_system.entity.StudentPerformance;
+import com.university.naac.naac_system.entity.enums.LearningCategory;
 import com.university.naac.naac_system.service.StudentPerformanceService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -87,5 +88,11 @@ public class StudentPerformanceController {
         PerformanceSummaryResponse summary = service.getSummary(programId);
         return ResponseEntity.ok(summary);
     }
+
+    @GetMapping("/category/{category}")
+    public List<StudentPerformanceResponse> getStudentsByCategory(@PathVariable LearningCategory category) {
+        return service.getStudentsByCategory(category);
+    }
+
 
 }

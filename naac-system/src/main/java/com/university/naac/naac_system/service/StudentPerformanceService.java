@@ -1,6 +1,7 @@
 package com.university.naac.naac_system.service;
 
 import com.university.naac.naac_system.dto.PerformanceSummaryResponse;
+import com.university.naac.naac_system.dto.StudentPerformanceResponse;
 import com.university.naac.naac_system.entity.StudentPerformance;
 import com.university.naac.naac_system.entity.enums.LearningCategory;
 
@@ -22,4 +23,6 @@ public interface StudentPerformanceService {
     Map<LearningCategory, Long> getSummaryBySemester(Long semesterId);
 
     PerformanceSummaryResponse getSummary(Long programId); // programId is optional
+
+    List<StudentPerformanceResponse> getStudentsByCategory(LearningCategory category);
 }

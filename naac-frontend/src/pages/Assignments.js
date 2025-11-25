@@ -1,18 +1,15 @@
+// src/pages/Assignments.js
 import React, { useState, useEffect } from 'react';
-
 import { assignmentService } from '../services/assignmentService';
-import { facultyService } from '../services/facultyService';
-
 
 const Assignments = () => {
   const [assignments, setAssignments] = useState([]);
-  const [faculties, setFaculties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     facultyId: '',
-    courseId: '',
-    semesterId: ''
+    courseCode: '',
+    semesterNumber: ''
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -23,14 +20,11 @@ const Assignments = () => {
 
   const fetchData = async () => {
     try {
-      const [assignmentsRes, facultiesRes] = await Promise.all([
-        assignmentService.getAll(),
-        facultyService.getAll()
-      ]);
-      setAssignments(assignmentsRes.data);
-      setFaculties(facultiesRes.data);
+      const res = await assignmentService.getAll();
+      setAssignments(res.data);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Error fetching assignments:', error);
+      setError('Failed to fetch assignments');
     } finally {
       setLoading(false);
     }
@@ -44,7 +38,7 @@ const Assignments = () => {
     try {
       await assignmentService.create(formData);
       setSuccess('Assignment created successfully!');
-      setFormData({ facultyId: '', courseId: '', semesterId: '' });
+      setFormData({ facultyId: '', courseCode: '', semesterNumber: '' });
       setShowModal(false);
       fetchData();
       setTimeout(() => setSuccess(''), 3000);
@@ -104,21 +98,21 @@ const Assignments = () => {
                   <tr>
                     <th>ID</th>
                     <th>Faculty</th>
-                    <th>Course ID</th>
-                    <th>Semester ID</th>
+                    <th>Course</th>
+                    <th>Semester</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {assignments.map((assignment) => (
-                    <tr key={assignment.id}>
-                      <td>{assignment.id}</td>
+                    <tr key={assignment.assignmentId}>
+                      <td>{assignment.assignmentId}</td>
                       <td>
                         <i className="bi bi-person-circle text-primary me-2"></i>
-                        {faculties.find(f => f.id === assignment.facultyId)?.name || 'N/A'}
+                        {assignment.facultyName || 'N/A'}
                       </td>
-                      <td>{assignment.courseId}</td>
-                      <td>{assignment.semesterId}</td>
+                      <td>{assignment.courseCode || 'N/A'}</td>
+                      <td>{assignment.semesterNumber || 'N/A'}</td>
                       <td>
                         <button className="btn btn-sm btn-outline-danger">
                           <i className="bi bi-trash"></i> Delete
@@ -148,40 +142,35 @@ const Assignments = () => {
               <form onSubmit={handleSubmit}>
                 <div className="modal-body">
                   <div className="mb-3">
-                    <label className="form-label">Faculty *</label>
-                    <select
-                      className="form-select"
-                      value={formData.facultyId}
-                      onChange={(e) => setFormData({ ...formData, facultyId: e.target.value })}
-                      required
-                    >
-                      <option value="">Select Faculty</option>
-                      {faculties.map((faculty) => (
-                        <option key={faculty.id} value={faculty.id}>
-                          {faculty.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="mb-3">
-                    <label className="form-label">Course ID *</label>
+                    <label className="form-label">Faculty ID *</label>
                     <input
                       type="number"
                       className="form-control"
-                      placeholder="Enter Course ID"
-                      value={formData.courseId}
-                      onChange={(e) => setFormData({ ...formData, courseId: e.target.value })}
+                      placeholder="Enter Faculty ID"
+                      value={formData.facultyId}
+                      onChange={(e) => setFormData({ ...formData, facultyId: e.target.value })}
                       required
                     />
                   </div>
                   <div className="mb-3">
-                    <label className="form-label">Semester ID *</label>
+                    <label className="form-label">Course Code *</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Enter Course Code"
+                      value={formData.courseCode}
+                      onChange={(e) => setFormData({ ...formData, courseCode: e.target.value })}
+                      required
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Semester Number *</label>
                     <input
                       type="number"
                       className="form-control"
-                      placeholder="Enter Semester ID"
-                      value={formData.semesterId}
-                      onChange={(e) => setFormData({ ...formData, semesterId: e.target.value })}
+                      placeholder="Enter Semester Number"
+                      value={formData.semesterNumber}
+                      onChange={(e) => setFormData({ ...formData, semesterNumber: e.target.value })}
                       required
                     />
                   </div>
@@ -192,7 +181,7 @@ const Assignments = () => {
                   </button>
                   <button type="submit" className="btn btn-primary">
                     <i className="bi bi-check-circle me-2"></i>
-                    Create Assignment.
+                    Create Assignment
                   </button>
                 </div>
               </form>

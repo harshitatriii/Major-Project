@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/mentor-mentee")
+@RequestMapping("/mentor-mentees")
 public class MentorMenteeController {
 
     private final MentorMenteeService service;
@@ -42,4 +42,10 @@ public class MentorMenteeController {
             public final long totalMentees = mentees;
         });
     }
+
+    @GetMapping("/mentees/count/{facultyId}")
+    public long getMenteesCount(@PathVariable Long facultyId) {
+        return service.getMenteesCountByMentor(facultyId);
+    }
+
 }

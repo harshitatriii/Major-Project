@@ -54,6 +54,8 @@ public class MentorMenteeServiceImpl implements MentorMenteeService {
         return repo.findByMentor_FacultyId(facultyId).stream().map(mm -> {
             MentorMenteeResponse r = new MentorMenteeResponse();
             r.setId(mm.getId());
+            r.setMentorId(mm.getMentor().getFacultyId());
+            r.setStudentId(mm.getMentee().getStudentId());
             r.setMentorName(mm.getMentor().getName());
             r.setStudentName(mm.getMentee().getName());
             r.setAssignedAt(mm.getAssignedAt());
@@ -82,4 +84,11 @@ public class MentorMenteeServiceImpl implements MentorMenteeService {
     public long countMentees() {
         return repo.countDistinctMentees();
     }
+
+    @Override
+    public long getMenteesCountByMentor(Long facultyId) {
+        return repo.countMenteesByMentor(facultyId);
+    }
+
+
 }

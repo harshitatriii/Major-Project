@@ -12,5 +12,8 @@ export const performanceService = {
   getSummary: () => api.get('/performances/summary'),
   
   // Get all performances (if needed)
-  getAll: () => api.get('/performances')
+  getAll: () => api.get('/performances'),
+
+  // Get students by category (ADVANCED, AVERAGE, SLOW)
+  getStudentsByCategory: (category) => api.get(`/performances/category/${category}`)
 };

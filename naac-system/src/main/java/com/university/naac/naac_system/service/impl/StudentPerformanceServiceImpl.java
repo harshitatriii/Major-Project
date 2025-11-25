@@ -1,6 +1,7 @@
 package com.university.naac.naac_system.service.impl;
 
 import com.university.naac.naac_system.dto.PerformanceSummaryResponse;
+import com.university.naac.naac_system.dto.StudentPerformanceResponse;
 import com.university.naac.naac_system.entity.Student;
 import com.university.naac.naac_system.entity.StudentPerformance;
 import com.university.naac.naac_system.entity.enums.LearningCategory;
@@ -117,5 +118,38 @@ public class StudentPerformanceServiceImpl implements StudentPerformanceService 
 
         return summary;
     }
+
+    @Override
+    public List<StudentPerformanceResponse> getStudentsByCategory(LearningCategory category) {
+        // Step 1: Get all performance entries for this category
+        List<StudentPerformance> performances = performanceRepo.findByCategory(category);
+
+        // Step 2: Keep only the latest evaluation per student
+        Map<Long, StudentPerformance> latestPerStudent = performances.stream()
+                .collect(Collectors.toMap(
+                        sp -> sp.getStudent().getStudentId(), // key = studentId
+                        sp -> sp,                              // value = performance
+                        (existing, replacement) -> existing.getEvaluatedAt().isAfter(replacement.getEvaluatedAt())
+                                ? existing
+                                : replacement // keep the latest
+                ));
+
+        // Step 3: Map to DTO
+        return latestPerStudent.values().stream()
+                .map(sp -> {
+                    StudentPerformanceResponse resp = new StudentPerformanceResponse();
+                    resp.setStudentId(sp.getStudent().getStudentId());
+                    resp.setStudentName(sp.getStudent().getName());
+                    resp.setMarksObtained(sp.getMarksObtained());
+                    resp.setTotalMarks(sp.getTotalMarks());
+                    resp.setPercentage(sp.getPercentage());
+                    resp.setCategory(sp.getCategory());
+                    resp.setEvaluatedAt(sp.getEvaluatedAt());
+                    return resp;
+                })
+                .collect(Collectors.toList());
+    }
+
+
 
 }

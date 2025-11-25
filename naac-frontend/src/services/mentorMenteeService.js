@@ -6,15 +6,14 @@ export const mentorMenteeService = {
   create: (data) => api.post('/mentor-mentees', data),
   
   // Get all mentees under a specific mentor
-  getMenteesByMentor: (facultyId) => api.get(`/mentor-mentees/mentor/${facultyId}`),
+  getMenteesByMentor: (facultyId) => api.get(`/mentor-mentees/mentees/${facultyId}`),
   
   // Get mentor of a specific student
-  getMentorByMentee: (studentId) => api.get(`/mentor-mentees/mentee/${studentId}`),
+  getMentorByMentee: (studentId) => api.get(`/mentor-mentees/mentor/${studentId}`),
   
   // Get count summary
   getCountSummary: () => api.get('/mentor-mentees/count-summary'),
   
   // Get all mappings (if needed)
   getAll: () => api.get('/mentor-mentees')
-  //nothing
 };

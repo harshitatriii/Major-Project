@@ -15,4 +15,6 @@ public interface MentorMenteeService {
     long countMentors();
 
     long countMentees();
+
+    long getMenteesCountByMentor(Long facultyId);
 }

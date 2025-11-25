@@ -1,6 +1,7 @@
 package com.university.naac.naac_system.repository;
 
 import com.university.naac.naac_system.entity.StudentPerformance;
+import com.university.naac.naac_system.entity.enums.LearningCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -28,5 +29,9 @@ public interface StudentPerformanceRepository extends JpaRepository<StudentPerfo
 
     @Query("SELECT COUNT(sp) FROM StudentPerformance sp WHERE sp.category = 'ADVANCED' AND sp.student.program.programId = :programId")
     long countAdvancedByProgram(Long programId);
+
+    // StudentPerformanceRepository.java
+    List<StudentPerformance> findByCategory(LearningCategory category);
+
 }
 
